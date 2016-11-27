@@ -43,10 +43,38 @@ class Racer
 	# Obtain the inserted document _id from the result and assign the to_s value of the _id to the instance attribute @id
 	def save
 	  result = self.class.collection.insert_one(:number => @number, :first_name => @first_name, :last_name => @last_name, :gender => @gender, :group => @group, :secs => @secs)
-
 	  @id = result.inserted_id.to_s
- 
 	end
+
+	# Create an instance method in the Racer class called update. This method must:
+	# Accept a hash as an input parameter.
+	# Updates the state of the instance variables – except for @id. That never should change.
+	# Find the racer associated with the current @id instance variable in the database
+	# Update the racer with the supplied values – replacing all values
+	def update(params)
+      @number = params[:number].to_i
+      @first_name = params[:first_name]
+      @last_name = params[:last_name]
+      @secs = params[:secs].to_i
+      @gender = params[:gender]
+      @group = params[:group]
+
+      params.slice!(:number, :first_name, :last_name, :gender, :group, :secs)
+      self.class.collection
+        .find(:_id=>BSON::ObjectId.from_string(@id))
+        .replace_one(params)
+	end
+
+	# Create an instance method in the Racer class called destroy. This method must:
+	# Accept no arguments
+	# Find the racer associated with the current @number instance variable in the database
+	# Remove that instance from the database
+	def destroy
+	  self.class.collection
+	    .find(number:@number)
+	    .delete_one
+	end
+
 
 
 	# Add an initializer that can set the properties of the class using the keys from a racers document. It must:
