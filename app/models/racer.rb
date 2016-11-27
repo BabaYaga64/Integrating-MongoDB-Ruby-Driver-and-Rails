@@ -1,13 +1,13 @@
 class Racer
-# Add attributes to the Racer class that allow one to set/get each of the following properties: id, number, first_name, last_name, gender, group, secs
-  attr_accessor :id, :number, :first_name, :last_name, :gender, :group, :secs
+	# Add attributes to the Racer class that allow one to set/get each of the following properties: id, number, first_name, last_name, gender, group, secs
+  	attr_accessor :id, :number, :first_name, :last_name, :gender, :group, :secs
 
-# Create a class method (using self prefix) called mongo_client that returns a MongoDB client configured to communicate to the default database specified in the config/mongoid.yml file. 
+	# Create a class method (using self prefix) called mongo_client that returns a MongoDB client configured to communicate to the default database specified in the config/mongoid.yml file. 
 	def self.mongo_client
 	  Mongoid::Clients.default
 	end
 
-# Create a class method (using self prefix) called collection that returns the racers MongoDB collection holding the Racer documents.
+	# Create a class method (using self prefix) called collection that returns the racers MongoDB collection holding the Racer documents.
 	def self.collection
 	  self.mongo_client['racers']
 	end
@@ -26,6 +26,27 @@ class Racer
  	    else result 
  	    end
 	end
+
+	# Create a class method in the Racer class called find. This method must:
+	# Accept a single id parameter that is either a string or BSON::ObjectId Note: it must be able to handle either format.
+	# Find the specific document with that _id.
+	# Return the racer document represented by that id.
+	def self.find id 
+	  Rails.logger.debug {"finding racer id: #{id}"}
+	  doc = collection.find(_id: BSON.ObjectId(id)).first 
+	  doc.nil? ? nil : Racer.new(doc)
+	end
+
+	# Create an instance method in the Racer class called save. This method must:
+	# Take no arguments.
+	# Insert the current state of the Racer instance into the database.
+	# Obtain the inserted document _id from the result and assign the to_s value of the _id to the instance attribute @id
+	def save
+	  result = self.class.collection
+	  @id = result
+ 
+	end
+
 
 	# Add an initializer that can set the properties of the class using the keys from a racers document. It must:
 	# Accept a hash of properties.
