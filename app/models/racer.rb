@@ -1,4 +1,6 @@
 class Racer
+# Add attributes to the Racer class that allow one to set/get each of the following properties: id, number, first_name, last_name, gender, group, secs
+  attr_accessor :id, :number, :first_name, :last_name, :gender, :group, :secs
 
 # Create a class method (using self prefix) called mongo_client that returns a MongoDB client configured to communicate to the default database specified in the config/mongoid.yml file. 
 	def self.mongo_client
@@ -25,6 +27,19 @@ class Racer
  	    end
 	end
 
-
+	# Add an initializer that can set the properties of the class using the keys from a racers document. It must:
+	# Accept a hash of properties.
+	# Assign instance attributes to the values from the hash.
+	# For the id property, this method must test whether the hash is coming from a web page [:id] or from a
+	# MongoDB query [:_id] and assign the value to whichever is non-nil.
+	def initialize(params={})
+	  @id = params[:_id].nil? ? params[:id] : params[:_id].to_s
+	  @number = params[:number].to_i
+	  @first_name = params[:first_name]
+	  @last_name = params[:last_name]
+	  @gender = params[:gender]
+	  @group = params[:group]
+	  @secs = params[:secs].to_i
+	end
 
 end
