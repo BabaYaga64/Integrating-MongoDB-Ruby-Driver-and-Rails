@@ -1,4 +1,6 @@
 class Racer
+	# Add the ActiveModel::Model mixin to the Racer class
+	include ActiveModel::Model
 	# Add attributes to the Racer class that allow one to set/get each of the following properties: id, number, first_name, last_name, gender, group, secs
   	attr_accessor :id, :number, :first_name, :last_name, :gender, :group, :secs
 
@@ -75,8 +77,6 @@ class Racer
 	    .delete_one
 	end
 
-
-
 	# Add an initializer that can set the properties of the class using the keys from a racers document. It must:
 	# Accept a hash of properties.
 	# Assign instance attributes to the values from the hash.
@@ -91,5 +91,17 @@ class Racer
 	  @group = params[:group]
 	  @secs = params[:secs].to_i
 	end
+
+	# Add an instance method to the Racer class called persisted?. This method must:
+	# Accept no arguments.
+	# Return true when @id is not nil. Remember – we assigned @id during save when we obtained the generated primary key.
+	def persisted?
+	  !@id.nil? 
+	end
+
+	
+
+
+
 
 end
