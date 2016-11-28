@@ -99,9 +99,16 @@ class Racer
 	  !@id.nil? 
 	end
 
-	
+	# Add two instance methods called created_at and updated_at to the Racer class that act as placeholders for property getters. They must:
+	# Accept no arguments
+	# Return nil or whatever date you would like. This is, of course, just a placeholder until we implement something that does this for real.
+	def created_at
+	  nil
+	end
 
-
+	def updated_at
+	  nil
+	end
 
 
 end
