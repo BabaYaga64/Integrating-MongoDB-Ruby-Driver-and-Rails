@@ -110,5 +110,27 @@ class Racer
 	  nil
 	end
 
+	# Add a class method to the Racer class called paginate. This method must:
+	# Accept a hash as input parameters.
+	# Extract the :page property from that hash, convert to an integer, and default to the value of 1 if not set.
+	# Extract the :per_page property from that hash, convert to an integer, and default to the value of 30 if not set
+	# Find all racers sorted by number assending.
+	# Limit the results to page and limit values.
+	# Convert each document hash to an instance of a Racer class
+	# Return a WillPaginate::Collection with the page, limit, and total values filled in – as well as the pageworth of data.
+	def self.paginate(params)
+	  page = (params[:page] || 1).to_i
+	  limit = (params[:per_page] || 30).to_i
+	  skip = (page-1)*limit
 
+	  racers = []
+	  all({}, {}, skip, limit).each do |doc|
+	  	racers << Racer.new(doc)
+	  end
+	  total = all.count 
+
+	  WillPaginate::Collection.create(page, limit, total) do |pager|
+	  	pager.replace(racers)
+	  end
+	end
 end
